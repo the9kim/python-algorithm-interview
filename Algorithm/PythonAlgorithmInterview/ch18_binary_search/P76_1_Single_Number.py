@@ -1,0 +1,10 @@
+from typing import List
+
+
+class P76_1_Single_number:
+    def singleNumber(self, nums:List[int]) -> int:
+        answer = 0
+        for num in nums:
+            answer ^= num
+
+        return answer
