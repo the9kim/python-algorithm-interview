@@ -1,6 +1,5 @@
-import itertools
-from typing import List
 from itertools import permutations
+from typing import List
 
 
 class P6_2_Exteral_Wall_Inspection:
@@ -14,41 +13,24 @@ class P6_2_Exteral_Wall_Inspection:
 
     def solution(self, n: int, weak: List[int], dist: List[int]):
         weak_size = len(weak)
-        min_people = float('inf')
-        weak += [w + n for w in weak]
+        weak += [n + w for w in weak]
+        min_num = float('inf')
 
-        # 1.
         for start in range(weak_size):
+            for friends in permutations(dist):
+                count = 1
+                position = weak[start] + friends[count - 1]
 
-            # 2.
-            for d in itertools.permutations(dist, len(dist)):
-                cnt = 1
-                curr = start
-
-                for i in range(1, weak_size):
-                    next = start + i
-                    diff = weak[next] - weak[curr]
-
-                    if diff > d[cnt - 1]:
-                        cnt += 1
-                        curr = next
-
-                        if cnt > len(dist):
+                for step in range(start, start + weak_size):
+                    if position < weak[step]:
+                        count += 1
+                        if count > len(dist):
                             break
+                        position = weak[step] + friends[count - 1]
 
-                # 3.
-                if cnt <= len(dist):
-                    min_people = min(min_people, cnt)
+                min_num = min(min_num, count)
 
-        if min_people == float('inf'):
+        if min_num > len(dist):
             return -1
 
-        return min_people
-
-
-
-
-
-
-
-
+        return min_num
